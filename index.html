@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Invoice</title>
+		<meta name="author" content="Nazar Ivato" />
+		<link rel="shortcut icon" href="coins.ico">
+		<script src="jquery-2.1.1.min.js"></script>
+		<script src="invoice.js"></script>
+		<link rel="stylesheet" type="text/css" href="invoice.css">
+	</head>
+	<body>
+		<div class="page">
+			<div class="title">
+				Invoice
+			</div>
+			<div class="add-bar">
+				<div class="data-input wide-input">
+					<label for="product-name" class="input-label">Product Name:</label>
+					<input type="text" id="product-name" autofocus="true" class="input-field"/>
+				</div>
+				<div class="data-input narrow-input">
+					<label for="units" class="input-label">Units:</label>
+					<select id="units" size="1">
+						<option value="pcs">pcs</option>
+						<option value="kg">kg</option>
+						<option value="l">l</option>
+						<option value="m">m</option>
+						<option value="m2">m&sup2;</option>
+					</select>
+				</div>
+				<div class="data-input narrow-input">
+					<label for="quantity" class="input-label">Quantity:</label>
+					<input type="text" id="quantity" autofocus="true" class="input-field"/>
+				</div>
+				<div class="data-input narrow-input">
+					<label for="price" class="input-label">Price, $:</label>
+					<input type="text" id="price" autofocus="true" class="input-field"/>
+				</div>
+				<div id="add-button"><img src="images/add.png"/></div>
+			</div>
+			<div class="table-head">
+				<div class="th-cell number">#</div>
+				<div class="th-cell product">Product Name</div>
+				<div class="th-cell units">Units</div>
+				<div class="th-cell quantity">Quantity</div>
+				<div class="th-cell price">Price, $</div>
+				<div class="th-cell total">Total, $</div>
+				<div class="th-cell actions">Actions</div>
+			</div>
+			<div class="rows-wrapper">
+				<div class="table-row">
+					<div class="tr-cell number">1</div>
+					<div class="tr-cell product">Kovbasa</div>
+					<div class="tr-cell units">kg</div>
+					<div class="tr-cell quantity">2</div>
+					<div class="tr-cell price">4.5</div>
+					<div class="tr-cell total">9</div>
+					<div class="tr-cell actions">
+						<img src="images/pencil.png" class="action-button" />
+						<img src="images/trash.png" class="action-button" />
+					</div>
+				</div>
+				<div class="table-row">
+					<div class="tr-cell number">2</div>
+					<div class="tr-cell product">Vodka</div>
+					<div class="tr-cell units">l</div>
+					<div class="tr-cell quantity">3</div>
+					<div class="tr-cell price">5.6</div>
+					<div class="tr-cell total">16.8</div>
+					<div class="tr-cell actions">
+						<img src="images/pencil.png" class="action-button" />
+						<img src="images/trash.png" class="action-button" />
+					</div>
+				</div>
+				<div class="table-row">
+					<div class="tr-cell number">3</div>
+					<div class="tr-cell product">Ceramic tile</div>
+					<div class="tr-cell units">m&sup2;</div>
+					<div class="tr-cell quantity">12</div>
+					<div class="tr-cell price">7.2</div>
+					<div class="tr-cell total">86.4</div>
+					<div class="tr-cell actions">
+						<img src="images/pencil.png" class="action-button" />
+						<img src="images/trash.png" class="action-button" />
+					</div>
+				</div>
+				<div class="table-row editable-row">
+					<div class="tr-cell editable-cell number">4</div>
+					<div class="tr-cell editable-cell product">
+						<input type="text" class="edit-input wide-edit" value="Network cable"/>
+					</div>
+					<div class="tr-cell editable-cell units">
+						<select size="1" class="edit-input narrow-edit">
+							<option value="pcs">pcs</option>
+							<option value="kg">kg</option>
+							<option value="l">l</option>
+							<option value="m" selected="selected">m</option>
+							<option value="m2">m&sup2;</option>
+						</select>
+					</div>
+					<div class="tr-cell editable-cell quantity">
+						<input type="text" class="edit-input narrow-edit" value="8"/>
+					</div>
+					<div class="tr-cell editable-cell price">
+						<input type="text" class="edit-input narrow-edit" value="2.1"/>
+					</div>
+					<div class="tr-cell editable-cell total">16.8</div>
+					<div class="tr-cell editable-cell actions">
+						<img src="images/accept.png" class="action-button" />
+						<img src="images/cancel.png	" class="action-button" />
+					</div>
+				</div>
+				<div class="table-row">
+					<div class="tr-cell number">5</div>
+					<div class="tr-cell product">Laptop ASUS HL 8</div>
+					<div class="tr-cell units">pcs</div>
+					<div class="tr-cell quantity">1</div>
+					<div class="tr-cell price">400</div>
+					<div class="tr-cell total">400</div>
+					<div class="tr-cell actions">
+						<img src="images/pencil.png" class="action-button" />
+						<img src="images/trash.png" class="action-button" />
+					</div>
+				</div>
+				<div class="table-row">
+					<div class="tr-cell number">6</div>
+					<div class="tr-cell product">Wireless mouse Logitech</div>
+					<div class="tr-cell units">pcs</div>
+					<div class="tr-cell quantity">1</div>
+					<div class="tr-cell price">40.8</div>
+					<div class="tr-cell total">40.8</div>
+					<div class="tr-cell actions">
+						<img src="images/pencil.png" class="action-button" />
+						<img src="images/trash.png" class="action-button" />
+					</div>
+				</div>
+			</div>
+			<div class="summary-row">
+				<div class="tr-cell number hidden">&nbsp;</div>
+				<div class="tr-cell product hidden">&nbsp;</div>
+				<div class="tr-cell units hidden">&nbsp;</div>
+				<div class="tr-cell totalprice summary"><img src="images/coins.png" class="action-button" />Total Price, $:</div>
+				<div class="tr-cell total summary">569.8</div>
+				<div class="tr-cell total hidden">&nbsp;</div>
+			</div>
+		</div>
+	</body>
+</html>
