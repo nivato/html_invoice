@@ -1,50 +1,35 @@
-var arrayOfDigits = [];
-
-function add_number(){
-    var input_field = $('#input-field');
-    var enteredNumbers = input_field.val().split(' ');
-    $('.error-message').text(' ');
-    for (var i = 0; i < enteredNumbers.length; i++) {
-        if (isNaN(parseInt(enteredNumbers[i]))){
-            $('.error-message').text('Invalid number entered');
-        } else {
-            var digit_div = jQuery('<div/>', {class: 'digit'});
-            digit_div.text(enteredNumbers[i]);
-            $('.digit-wrapper').append(digit_div);
-            arrayOfDigits.push(parseInt(enteredNumbers[i]));
-        }
-    }
-    input_field.val('');
-    if (arrayOfDigits.length > 0){
-        var min = arrayOfDigits[0];
-        var max = arrayOfDigits[0];
-        var sum = 0;
-        for (var i = 0; i < arrayOfDigits.length; i++) {
-            if (arrayOfDigits[i] > max){
-                max = arrayOfDigits[i];
-            }
-            if (arrayOfDigits[i] < min){
-                min = arrayOfDigits[i];
-            }
-            sum += arrayOfDigits[i];
-        }
-        var avg = sum / arrayOfDigits.length;
-        $('.min').text(min);
-        $('.max').text(max);
-        $('.avg').text(avg.toFixed(2));
-    }
+function add_product_row(){
+    var row = jQuery('<div/>', {class: 'table-row'});
+    var number_cell     = jQuery('<div/>', {class: 'tr-cell number'});
+    var product_cell    = jQuery('<div/>', {class: 'tr-cell product'});
+    var units_cell      = jQuery('<div/>', {class: 'tr-cell units'});
+    var quantity_cell   = jQuery('<div/>', {class: 'tr-cell quantity'});
+    var price_cell      = jQuery('<div/>', {class: 'tr-cell price'});
+    var total_cell      = jQuery('<div/>', {class: 'tr-cell total'});
+    var actions_cell    = jQuery('<div/>', {class: 'tr-cell actions'});
+    row.append(number_cell, product_cell, units_cell, quantity_cell, price_cell, total_cell, actions_cell);
+    number_cell.text($('.rows-wrapper').children().length + 1);
+    product_cell.text($('#product-name').val());
+    units_cell.text($('#units option:selected').text());
+    quantity_cell.text($('#quantity').val());
+    price_cell.text($('#price').val());
+    total_cell.text('total');
+    var edit_button     = jQuery('<img/>', {src: 'images/pencil.png', class: 'action-button'});
+    var delete_button   = jQuery('<img/>', {src: 'images/trash.png', class: 'action-button'});
+    actions_cell.append(edit_button, delete_button);
+    $('.rows-wrapper').append(row);
 }
 
-function add_number_on_enter(event){
+function add_product_row_on_enter(event){
     var keyCode = (typeof event.which === 'number')? event.which: event.keyCode;
     if (keyCode === 13){
-        add_number();
+        product_row();
     }
 }
 
 function start(){
-    $('#add-button').click(add_number);
-    $('#input-field').keyup(add_number_on_enter);
+    $('#add-button').click(add_product_row);
+    //$('#input-field').keyup(add_number_on_enter);
 }
 
 $(document).ready(start);

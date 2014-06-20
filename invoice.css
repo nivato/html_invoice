@@ -79,14 +79,11 @@ div {
 
 #add-button {
 	float: right;
-	margin-right: 15px;
-	margin-top: 15px;
-}
-
-#add-button, #add-button img {
 	width: 30px;
 	height: 30px;
 	cursor: pointer;
+	margin-right: 15px;
+	margin-top: 15px;
 }
 
 .table-head {
