@@ -46,7 +46,6 @@ function add_product_row(product_name, quantity, price){
     var total_cell      = jQuery('<div/>', {class: 'tr-cell total'});
     var actions_cell    = jQuery('<div/>', {class: 'tr-cell actions'});
     row.append(number_cell, product_cell, units_cell, quantity_cell, price_cell, total_cell, actions_cell);
-    number_cell.text($('.rows-wrapper').children().length + 1);
     product_cell.text(product_name);
     units_cell.text($('#units option:selected').text());
     quantity_cell.text(quantity);
@@ -55,10 +54,26 @@ function add_product_row(product_name, quantity, price){
     var edit_button     = jQuery('<img/>', {src: 'images/pencil.png', class: 'action-button'});
     var delete_button   = jQuery('<img/>', {src: 'images/trash.png', class: 'action-button'});
     actions_cell.append(edit_button, delete_button);
+    delete_button.click(delete_product_row);
     $('.rows-wrapper').append(row);
-    
+    make_rows_ordering();
     calculate_total_price();
     clear_inputs();
+}
+
+function delete_product_row(event){
+    var button = $(event.target);
+    var row = button.parent().parent();
+    row.remove();
+    make_rows_ordering();
+    calculate_total_price();
+}
+
+function make_rows_ordering(){
+    var all_number_cells = $('.tr-cell.number').toArray();
+    for (var i = 0; i < all_number_cells.length; i++){
+        $(all_number_cells[i]).text(i + 1);
+    }
 }
 
 function calculate_total_price(){
