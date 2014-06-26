@@ -3,17 +3,17 @@ function verify_inputs(){
     take_off_errors_signs_from_inputs();
     var product_name = $('#product-name').val();
     if (product_name.length < 3){
-        $('#product-name').attr('class', 'input-field error');
+        $('#product-name').addClass('error');
         error = true;
     }
     var quantity = parseFloat($('#quantity').val());
     if (isNaN(quantity)){
-        $('#quantity').attr('class', 'input-field error');
+        $('#quantity').addClass('error');
         error = true;
     }
     var price = parseFloat($('#price').val());
     if (isNaN(price)){
-        $('#price').attr('class', 'input-field error');
+        $('#price').addClass('error');
         error = true;
     }
     if (error){
@@ -24,9 +24,9 @@ function verify_inputs(){
 }
 
 function take_off_errors_signs_from_inputs(){
-    $('#product-name').attr('class', 'input-field');
-    $('#quantity').attr('class', 'input-field');
-    $('#price').attr('class', 'input-field');
+    $('#product-name').removeClass('error');
+    $('#quantity').removeClass('error');
+    $('#price').removeClass('error');
 }
 
 function clear_inputs(){
@@ -54,11 +54,40 @@ function add_product_row(product_name, quantity, price){
     var edit_button     = jQuery('<img/>', {src: 'images/pencil.png', class: 'action-button'});
     var delete_button   = jQuery('<img/>', {src: 'images/trash.png', class: 'action-button'});
     actions_cell.append(edit_button, delete_button);
+    edit_button.click(make_row_editable);
     delete_button.click(delete_product_row);
     $('.rows-wrapper').append(row);
     make_rows_ordering();
     calculate_total_price();
     clear_inputs();
+}
+
+function make_row_editable(event){
+    var button = $(event.target);
+    var row = button.parent().parent();
+    row.addClass('editable-row');
+    var all_cells = row.children().toArray();
+    for (var i = 0; i < all_cells.length; i++){
+        $(all_cells[i]).addClass('editable-cell');
+    }
+    
+    var product_cell = row.children('.product').first();
+    var product_input = jQuery('<input/>', {type: 'text', class: 'edit-input wide-edit'});
+    product_input.val(product_cell.text());
+    product_cell.text('');
+    product_cell.append(product_input);
+    
+    var quantity_cell = row.children('.quantity').first();
+    var quantity_input = jQuery('<input/>', {type: 'text', class: 'edit-input narrow-edit'});
+    quantity_input.val(quantity_cell.text());
+    quantity_cell.text('');
+    quantity_cell.append(quantity_input);
+    
+    var price_cell = row.children('.price').first();
+    var price_input = jQuery('<input/>', {type: 'text', class: 'edit-input narrow-edit'});
+    price_input.val(price_cell.text());
+    price_cell.text('');
+    price_cell.append(price_input);
 }
 
 function delete_product_row(event){
