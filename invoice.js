@@ -91,6 +91,7 @@ function make_row_editable(event){
     product_input.val(previous_product);
     product_cell.text('');
     product_cell.append(product_input);
+    product_input.keyup(accept_edit_on_enter);
     
     var units_cell = row.children('.units').first();
     var units_select = jQuery('<select/>', {size: '1', class: 'edit-input narrow-edit'});
@@ -107,6 +108,7 @@ function make_row_editable(event){
     quantity_input.val(prevoius_quantity);
     quantity_cell.text('');
     quantity_cell.append(quantity_input);
+    quantity_input.keyup(accept_edit_on_enter);
     
     var price_cell = row.children('.price').first();
     var price_input = jQuery('<input/>', {type: 'text', class: 'edit-input narrow-edit'});
@@ -114,6 +116,7 @@ function make_row_editable(event){
     price_input.val(previous_price);
     price_cell.text('');
     price_cell.append(price_input);
+    price_input.keyup(accept_edit_on_enter);
     
     var actions_cell = row.children('.actions').first();
     actions_cell.html('');
@@ -170,6 +173,16 @@ function verify_edit_inputs(event){
     
     if (!error){
         accept_edit_row(event);
+    }
+}
+
+function accept_edit_on_enter(event){
+    var keyCode = (typeof event.which === 'number')? event.which: event.keyCode;
+    if (keyCode === 13){
+        verify_edit_inputs(event);
+    }
+    if (keyCode === 27){ //Esc key pressed
+        cancel_edit_row(event);
     }
 }
 
