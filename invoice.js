@@ -4,6 +4,7 @@ var prevoius_quantity   = undefined;
 var previous_price      = undefined;
 
 function verify_inputs(){
+    cancel_previous_editable_row();
     var error = false;
     take_off_errors_signs_from_inputs();
     var product_name = $('#product-name').val();
@@ -74,6 +75,7 @@ function add_product_row(product_name, quantity, price){
 function make_row_editable(event){
     take_off_errors_signs_from_inputs();
     clear_inputs();
+    cancel_previous_editable_row();
     
     var button = $(event.target);
     var row = button.parent().parent();
@@ -124,6 +126,13 @@ function make_row_editable(event){
     product_input.focus();
 }
 
+function cancel_previous_editable_row(){
+    var row = $('.editable-row');
+    if (row.length === 1){
+        make_row_readonly(row);
+    }
+}
+
 function verify_edit_inputs(event){
     take_off_errors_signs_from_inputs();
     clear_inputs();
@@ -149,7 +158,6 @@ function verify_edit_inputs(event){
         quantity_input.focus();
         error = true;
     }
-    
     
     var price_cell = row.children('.price').first();
     var price_input = price_cell.children('input').first();
@@ -196,7 +204,7 @@ function accept_edit_row(event){
     var price_input = price_cell.children('input').first();
     var price = parseFloat(price_input.val());
     price_cell.html('');
-    price_cell.text(quantity);
+    price_cell.text(price);
     
     var total_cell = row.children('.total').first();
     total_cell.text(quantity * price);
@@ -223,6 +231,10 @@ function cancel_edit_row(event){
     
     var button = $(event.target);
     var row = button.parent().parent();
+    make_row_readonly(row);
+}
+
+function make_row_readonly(row){
     row.removeClass('editable-row');
     var all_cells = row.children().toArray();
     for (var i = 0; i < all_cells.length; i++){
@@ -262,6 +274,7 @@ function cancel_edit_row(event){
 function delete_product_row(event){
     take_off_errors_signs_from_inputs();
     clear_inputs();
+    cancel_previous_editable_row();
     
     var button = $(event.target);
     var row = button.parent().parent();
