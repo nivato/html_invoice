@@ -3,50 +3,18 @@ var previous_units      = undefined;
 var prevoius_quantity   = undefined;
 var previous_price      = undefined;
 
-function verify_inputs(){
+var add_panel = new AddPanel();
+
+function add_product_row(){
     cancel_previous_editable_row();
-    var error = false;
-    take_off_errors_signs_from_inputs();
-    var product_name = $('#product-name').val();
-    if (product_name.length < 3){
-        $('#product-name').addClass('error');
-        $('#product-name').focus();
-        error = true;
-    }
-    var quantity = parseFloat($('#quantity').val());
-    if (isNaN(quantity)){
-        $('#quantity').addClass('error');
-        $('#quantity').focus();
-        error = true;
-    }
-    var price = parseFloat($('#price').val());
-    if (isNaN(price)){
-        $('#price').addClass('error');
-        $('#price').focus();
-        error = true;
-    }
-    if (error){
+    if (!add_panel.inputs_verified()){
         return;
-    } else {
-        add_product_row(product_name, quantity, price);
     }
-}
-
-function take_off_errors_signs_from_inputs(){
-    $('#product-name').removeClass('error');
-    $('#quantity').removeClass('error');
-    $('#price').removeClass('error');
-}
-
-function clear_inputs(){
-    $('#product-name').val('');
-    $('#units').val('pcs');
-    $('#quantity').val('');
-    $('#price').val('');
-    $('#product-name').focus();
-}
-
-function add_product_row(product_name, quantity, price){
+    var product_name    = add_panel.get_product_name();
+    var units           = add_panel.get_units();
+    var quantity        = add_panel.get_quantity();
+    var price           = add_panel.get_price();
+    
     var row = jQuery('<div/>', {class: 'table-row'});
     var number_cell     = jQuery('<div/>', {class: 'tr-cell number'});
     var product_cell    = jQuery('<div/>', {class: 'tr-cell product'});
@@ -57,7 +25,7 @@ function add_product_row(product_name, quantity, price){
     var actions_cell    = jQuery('<div/>', {class: 'tr-cell actions'});
     row.append(number_cell, product_cell, units_cell, quantity_cell, price_cell, total_cell, actions_cell);
     product_cell.text(product_name);
-    units_cell.text($('#units option:selected').text());
+    units_cell.text(units);
     quantity_cell.text(quantity);
     price_cell.text(price);
     total_cell.text(quantity * price);
@@ -69,12 +37,11 @@ function add_product_row(product_name, quantity, price){
     $('.rows-wrapper').append(row);
     make_rows_ordering();
     calculate_total_price();
-    clear_inputs();
+    add_panel.clear_inputs();
 }
 
 function make_row_editable(event){
-    take_off_errors_signs_from_inputs();
-    clear_inputs();
+    add_panel.clear_inputs();
     cancel_previous_editable_row();
     
     var button = $(event.target);
@@ -137,8 +104,7 @@ function cancel_previous_editable_row(){
 }
 
 function verify_edit_inputs(event){
-    take_off_errors_signs_from_inputs();
-    clear_inputs();
+    add_panel.clear_inputs();
     
     var button = $(event.target);
     var row = button.parent().parent();
@@ -239,9 +205,7 @@ function accept_edit_row(event){
 }
 
 function cancel_edit_row(event){
-    take_off_errors_signs_from_inputs();
-    clear_inputs();
-    
+    add_panel.clear_inputs();
     var button = $(event.target);
     var row = button.parent().parent();
     make_row_readonly(row);
@@ -285,8 +249,7 @@ function make_row_readonly(row){
 }
 
 function delete_product_row(event){
-    take_off_errors_signs_from_inputs();
-    clear_inputs();
+    add_panel.clear_inputs();
     cancel_previous_editable_row();
     
     var button = $(event.target);
@@ -315,12 +278,12 @@ function calculate_total_price(){
 function add_product_row_on_enter(event){
     var keyCode = (typeof event.which === 'number')? event.which: event.keyCode;
     if (keyCode === 13){
-        verify_inputs();
+        add_product_row();
     }
 }
 
 function start(){
-    $('#add-button').click(verify_inputs);
+    $('#add-button').click(add_product_row);
     $('#product-name').keyup(add_product_row_on_enter);
     $('#quantity').keyup(add_product_row_on_enter);
     $('#price').keyup(add_product_row_on_enter);
