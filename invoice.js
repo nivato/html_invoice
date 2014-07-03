@@ -10,31 +10,15 @@ function add_product_row(){
     if (!add_panel.inputs_verified()){
         return;
     }
-    var product_name    = add_panel.get_product_name();
-    var units           = add_panel.get_units();
-    var quantity        = add_panel.get_quantity();
-    var price           = add_panel.get_price();
-    
-    var row = jQuery('<div/>', {class: 'table-row'});
-    var number_cell     = jQuery('<div/>', {class: 'tr-cell number'});
-    var product_cell    = jQuery('<div/>', {class: 'tr-cell product'});
-    var units_cell      = jQuery('<div/>', {class: 'tr-cell units'});
-    var quantity_cell   = jQuery('<div/>', {class: 'tr-cell quantity'});
-    var price_cell      = jQuery('<div/>', {class: 'tr-cell price'});
-    var total_cell      = jQuery('<div/>', {class: 'tr-cell total'});
-    var actions_cell    = jQuery('<div/>', {class: 'tr-cell actions'});
-    row.append(number_cell, product_cell, units_cell, quantity_cell, price_cell, total_cell, actions_cell);
-    product_cell.text(product_name);
-    units_cell.text(units);
-    quantity_cell.text(quantity);
-    price_cell.text(price);
-    total_cell.text(quantity * price);
-    var edit_button     = jQuery('<img/>', {src: 'images/pencil.png', class: 'action-button'});
-    var delete_button   = jQuery('<img/>', {src: 'images/trash.png', class: 'action-button'});
-    actions_cell.append(edit_button, delete_button);
-    edit_button.click(make_row_editable);
-    delete_button.click(delete_product_row);
-    $('.rows-wrapper').append(row);
+    var row = new ProductRow().create();
+    row.set_product_name(add_panel.get_product_name());
+    row.set_units(add_panel.get_units());
+    row.set_quantity(add_panel.get_quantity());
+    row.set_price(add_panel.get_price());
+    row.calculate_total();
+    row.edit_button().click(make_row_editable);
+    row.delete_button().click(delete_product_row);
+    $('.rows-wrapper').append(row.element());
     make_rows_ordering();
     calculate_total_price();
     add_panel.clear_inputs();
