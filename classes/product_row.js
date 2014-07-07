@@ -1,8 +1,9 @@
-function ProductRow(){
-    this.row_element = undefined;
-    this.quantity = undefined;
-    this.price = undefined;
-    this.total = undefined;
+function ProductRow(row_element){
+    if (row_element === undefined){
+        this.create();
+    } else {
+        this.row_element = row_element;
+    }
 }
 
 ProductRow.prototype.create = function(){
@@ -21,6 +22,43 @@ ProductRow.prototype.create = function(){
     return this;
 };
 
+ProductRow.prototype.make_editable = function(){
+    this.row_element.addClass('editable-row');
+    this.row_element.children().addClass('editable-cell');
+    
+    var product_cell = this._product_cell();
+    var product_input = jQuery('<input/>', {type: 'text', class: 'edit-input wide-edit'});
+    product_input.val(product_cell.text());
+    product_cell.html(product_input);
+    
+    var units_cell = this._units_cell();
+    var units_options = ['pcs', 'kg', 'l', 'm', 'm&sup2;'];
+    var units_select = jQuery('<select/>', {size: '1', class: 'edit-input narrow-edit'});
+    for (var i=0; i<units_options.length; i++){
+        var option = jQuery('<option/>');
+        option.html(units_options[i]);
+        units_select.append(option);
+    }
+    units_select.val(units_cell.text());
+    units_cell.html(units_select);
+    
+    var quantity_cell = this._quantity_cell();
+    var quantity_input = jQuery('<input/>', {type: 'text', class: 'edit-input narrow-edit'});
+    quantity_input.val(quantity_cell.text());
+    quantity_cell.html(quantity_input);
+    
+    var price_cell = this._price_cell();
+    var price_input = jQuery('<input/>', {type: 'text', class: 'edit-input narrow-edit'});
+    price_input.val(price_cell.text());
+    price_cell.html(price_input);
+    
+    var actions_cell = this._actions_cell();
+    actions_cell.html('');
+    var accept_button   = jQuery('<img/>', {src: 'images/accept.png', class: 'action-button'});
+    var cancel_button   = jQuery('<img/>', {src: 'images/cancel.png', class: 'action-button'});
+    actions_cell.append(accept_button, cancel_button);
+};
+
 ProductRow.prototype.element = function(){
     return this.row_element;
 };
@@ -34,22 +72,55 @@ ProductRow.prototype.set_units = function(value){
 };
 
 ProductRow.prototype.set_quantity = function(value){
-    this.quantity = value;
     this._quantity_cell().text(value);
 };
 
 ProductRow.prototype.set_price = function(value){
-    this.price = value;
     this._price_cell().text(value);
 };
 
 ProductRow.prototype.set_total = function(value){
-    this.total = value;
     this._total_cell().text(value);
 };
 
 ProductRow.prototype.calculate_total = function(){
-    this.set_total(this.quantity * this.price);
+    this.set_total(this.get_quantity() * this.get_price());
+};
+
+ProductRow.prototype.get_product_name = function(){
+    return this._product_cell().text();
+};
+
+ProductRow.prototype.get_units = function(){
+    return this._units_cell().text();
+};
+
+ProductRow.prototype.get_quantity = function(){
+    return parseFloat(this._quantity_cell().text());
+};
+
+ProductRow.prototype.get_price = function(){
+    return parseFloat(this._price_cell().text());
+};
+
+ProductRow.prototype.get_total = function(){
+    return parseFloat(this._total_cell().text());
+};
+
+ProductRow.prototype.product_input = function(){
+    return this._product_cell().children('input').first();
+};
+
+ProductRow.prototype.units_select = function(){
+    return this._units_cell().children('select').first();
+};
+
+ProductRow.prototype.quantity_input = function(){
+    return this._quantity_cell().children('input').first();
+};
+
+ProductRow.prototype.price_input = function(){
+    return this._price_cell().children('input').first();
 };
 
 ProductRow.prototype.edit_button = function(){
@@ -58,6 +129,14 @@ ProductRow.prototype.edit_button = function(){
 
 ProductRow.prototype.delete_button = function(){
     return this._actions_cell().children('img[src$="trash.png"]').first();
+};
+
+ProductRow.prototype.accept_button = function(){
+    return this._actions_cell().children('img[src$="accept.png"]').first();
+};
+
+ProductRow.prototype.cancel_button = function(){
+    return this._actions_cell().children('img[src$="cancel.png"]').first();
 };
 
 ProductRow.prototype._number_cell = function(){

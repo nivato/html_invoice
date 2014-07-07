@@ -10,7 +10,7 @@ function add_product_row(){
     if (!add_panel.inputs_verified()){
         return;
     }
-    var row = new ProductRow().create();
+    var row = new ProductRow();
     row.set_product_name(add_panel.get_product_name());
     row.set_units(add_panel.get_units());
     row.set_quantity(add_panel.get_quantity());
@@ -28,56 +28,23 @@ function make_row_editable(event){
     add_panel.clear_inputs();
     cancel_previous_editable_row();
     
-    var button = $(event.target);
-    var row = button.parent().parent();
-    row.addClass('editable-row');
-    var all_cells = row.children().toArray();
-    for (var i = 0; i < all_cells.length; i++){
-        $(all_cells[i]).addClass('editable-cell');
-    }
+    var row_element = $(event.target).parent().parent();
+    var row = new ProductRow(row_element);
     
-    var product_cell = row.children('.product').first();
-    var product_input = jQuery('<input/>', {type: 'text', class: 'edit-input wide-edit'});
-    previous_product = product_cell.text();
-    product_input.val(previous_product);
-    product_cell.text('');
-    product_cell.append(product_input);
-    product_input.keyup(accept_edit_on_enter);
+    previous_product    = row.get_product_name();
+    previous_units      = row.get_units();
+    prevoius_quantity   = row.get_quantity();
+    previous_price      = row.get_price();
     
-    var units_cell = row.children('.units').first();
-    var units_select = jQuery('<select/>', {size: '1', class: 'edit-input narrow-edit'});
-    var unit_options = $('#units option').clone();
-    units_select.append(unit_options);
-    previous_units = units_cell.text();
-    units_select.val(previous_units);
-    units_cell.text('');
-    units_cell.append(units_select);
+    row.make_editable();
+    row.product_input().keyup(accept_edit_on_enter);
+    row.quantity_input().keyup(accept_edit_on_enter);
+    row.price_input().keyup(accept_edit_on_enter);
     
-    var quantity_cell = row.children('.quantity').first();
-    var quantity_input = jQuery('<input/>', {type: 'text', class: 'edit-input narrow-edit'});
-    prevoius_quantity = quantity_cell.text();
-    quantity_input.val(prevoius_quantity);
-    quantity_cell.text('');
-    quantity_cell.append(quantity_input);
-    quantity_input.keyup(accept_edit_on_enter);
+    row.accept_button().click(verify_edit_inputs);
+    row.cancel_button().click(cancel_edit_row);
     
-    var price_cell = row.children('.price').first();
-    var price_input = jQuery('<input/>', {type: 'text', class: 'edit-input narrow-edit'});
-    previous_price = price_cell.text();
-    price_input.val(previous_price);
-    price_cell.text('');
-    price_cell.append(price_input);
-    price_input.keyup(accept_edit_on_enter);
-    
-    var actions_cell = row.children('.actions').first();
-    actions_cell.html('');
-    var accept_button   = jQuery('<img/>', {src: 'images/accept.png', class: 'action-button'});
-    var cancel_button   = jQuery('<img/>', {src: 'images/cancel.png', class: 'action-button'});
-    actions_cell.append(accept_button, cancel_button);
-    accept_button.click(verify_edit_inputs);
-    cancel_button.click(cancel_edit_row);
-    
-    product_input.focus();
+    row.product_input().focus();
 }
 
 function cancel_previous_editable_row(){
@@ -140,10 +107,7 @@ function accept_edit_row(event){
     var button = $(event.target);
     var row = button.parent().parent();
     row.removeClass('editable-row');
-    var all_cells = row.children().toArray();
-    for (var i = 0; i < all_cells.length; i++){
-        $(all_cells[i]).removeClass('editable-cell');
-    }
+    row.children().removeClass('editable-cell');
     
     var product_cell = row.children('.product').first();
     var product_input = product_cell.children('input').first();
@@ -197,10 +161,7 @@ function cancel_edit_row(event){
 
 function make_row_readonly(row){
     row.removeClass('editable-row');
-    var all_cells = row.children().toArray();
-    for (var i = 0; i < all_cells.length; i++){
-        $(all_cells[i]).removeClass('editable-cell');
-    }
+    row.children().removeClass('editable-cell');
     
     var product_cell = row.children('.product').first();
     product_cell.html('');
