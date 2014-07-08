@@ -59,6 +59,34 @@ ProductRow.prototype.make_editable = function(){
     actions_cell.append(accept_button, cancel_button);
 };
 
+ProductRow.prototype.inputs_verified = function(){
+    var error = false;
+    var product_input = this.product_input();
+    product_input.removeClass('error');
+    if (product_input.val().length < 3){
+        product_input.addClass('error');
+        product_input.focus();
+        error = true;
+    }
+    
+    var quantity_input = this.quantity_input();
+    quantity_input.removeClass('error');
+    if (isNaN(parseFloat(quantity_input.val()))){
+        quantity_input.addClass('error');
+        quantity_input.focus();
+        error = true;
+    }
+    
+    var price_input = this.price_input();
+    price_input.removeClass('error');
+    if (isNaN(parseFloat(price_input.val()))){
+        price_input.addClass('error');
+        price_input.focus();
+        error = true;
+    }
+    return !error;
+};
+
 ProductRow.prototype.element = function(){
     return this.row_element;
 };

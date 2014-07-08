@@ -56,39 +56,9 @@ function cancel_previous_editable_row(){
 
 function verify_edit_inputs(event){
     add_panel.clear_inputs();
-    
-    var button = $(event.target);
-    var row = button.parent().parent();
-    var error = false;
-    
-    var product_cell = row.children('.product').first();
-    var product_input = product_cell.children('input').first();
-    product_input.removeClass('error');
-    if (product_input.val().length < 3){
-        product_input.addClass('error');
-        product_input.focus();
-        error = true;
-    }
-    
-    var quantity_cell = row.children('.quantity').first();
-    var quantity_input = quantity_cell.children('input').first();
-    quantity_input.removeClass('error');
-    if (isNaN(parseFloat(quantity_input.val()))){
-        quantity_input.addClass('error');
-        quantity_input.focus();
-        error = true;
-    }
-    
-    var price_cell = row.children('.price').first();
-    var price_input = price_cell.children('input').first();
-    price_input.removeClass('error');
-    if (isNaN(parseFloat(price_input.val()))){
-        price_input.addClass('error');
-        price_input.focus();
-        error = true;
-    }
-    
-    if (!error){
+    var row_element = $(event.target).parent().parent();
+    var row = new ProductRow(row_element);
+    if (row.inputs_verified()){
         accept_edit_row(event);
     }
 }
