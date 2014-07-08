@@ -74,45 +74,12 @@ function accept_edit_on_enter(event){
 }
 
 function accept_edit_row(event){
-    var button = $(event.target);
-    var row = button.parent().parent();
-    row.removeClass('editable-row');
-    row.children().removeClass('editable-cell');
+    var row_element = $(event.target).parent().parent();
+    var row = new ProductRow(row_element);
     
-    var product_cell = row.children('.product').first();
-    var product_input = product_cell.children('input').first();
-    var product = product_input.val();
-    product_cell.html('');
-    product_cell.text(product);
-    
-    var units_cell = row.children('.units').first();
-    var units_select = units_cell.children('select').first();
-    var units = units_select.val();
-    units_cell.html('');
-    units_cell.text(units);
-    
-    var quantity_cell = row.children('.quantity').first();
-    var quantity_input = quantity_cell.children('input').first();
-    var quantity = parseFloat(quantity_input.val());
-    quantity_cell.html('');
-    quantity_cell.text(quantity);
-    
-    var price_cell = row.children('.price').first();
-    var price_input = price_cell.children('input').first();
-    var price = parseFloat(price_input.val());
-    price_cell.html('');
-    price_cell.text(price);
-    
-    var total_cell = row.children('.total').first();
-    total_cell.text(quantity * price);
-    
-    var actions_cell = row.children('.actions').first();
-    actions_cell.html('');
-    var edit_button     = jQuery('<img/>', {src: 'images/pencil.png', class: 'action-button'});
-    var delete_button   = jQuery('<img/>', {src: 'images/trash.png', class: 'action-button'});
-    actions_cell.append(edit_button, delete_button);
-    edit_button.click(make_row_editable);
-    delete_button.click(delete_product_row);
+    row.accept_edit();
+    row.edit_button().click(make_row_editable);
+    row.delete_button().click(delete_product_row);
     
     previous_product    = undefined;
     previous_units      = undefined;

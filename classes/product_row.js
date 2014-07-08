@@ -15,11 +15,8 @@ ProductRow.prototype.create = function(){
     var price_cell      = jQuery('<div/>', {class: 'tr-cell price'});
     var total_cell      = jQuery('<div/>', {class: 'tr-cell total'});
     var actions_cell    = jQuery('<div/>', {class: 'tr-cell actions'});
-    var edit_button     = jQuery('<img/>', {src: 'images/pencil.png', class: 'action-button'});
-    var delete_button   = jQuery('<img/>', {src: 'images/trash.png', class: 'action-button'});
-    actions_cell.append(edit_button, delete_button);
     this.row_element.append(number_cell, product_cell, units_cell, quantity_cell, price_cell, total_cell, actions_cell);
-    return this;
+    this._activate_edit_delete_buttons();
 };
 
 ProductRow.prototype.make_editable = function(){
@@ -52,11 +49,7 @@ ProductRow.prototype.make_editable = function(){
     price_input.val(price_cell.text());
     price_cell.html(price_input);
     
-    var actions_cell = this._actions_cell();
-    actions_cell.html('');
-    var accept_button   = jQuery('<img/>', {src: 'images/accept.png', class: 'action-button'});
-    var cancel_button   = jQuery('<img/>', {src: 'images/cancel.png', class: 'action-button'});
-    actions_cell.append(accept_button, cancel_button);
+    this._activate_accept_cancel_buttons();
 };
 
 ProductRow.prototype.inputs_verified = function(){
@@ -68,7 +61,6 @@ ProductRow.prototype.inputs_verified = function(){
         product_input.focus();
         error = true;
     }
-    
     var quantity_input = this.quantity_input();
     quantity_input.removeClass('error');
     if (isNaN(parseFloat(quantity_input.val()))){
@@ -76,7 +68,6 @@ ProductRow.prototype.inputs_verified = function(){
         quantity_input.focus();
         error = true;
     }
-    
     var price_input = this.price_input();
     price_input.removeClass('error');
     if (isNaN(parseFloat(price_input.val()))){
@@ -87,27 +78,45 @@ ProductRow.prototype.inputs_verified = function(){
     return !error;
 };
 
+ProductRow.prototype.accept_edit = function(){
+    this.row_element.removeClass('editable-row');
+    this.row_element.children().removeClass('editable-cell');
+    
+    this.set_product_name(this.product_input().val());
+    this.set_units(this.units_select().val());
+    this.set_quantity(this.quantity_input().val());
+    this.set_price(this.price_input().val());
+    this.calculate_total();
+    
+    this._activate_edit_delete_buttons();
+};
+
 ProductRow.prototype.element = function(){
     return this.row_element;
 };
 
 ProductRow.prototype.set_product_name = function(value){
+    this._product_cell().html('');
     this._product_cell().text(value);
 };
 
 ProductRow.prototype.set_units = function(value){
+    this._units_cell().html('');
     this._units_cell().text(value);
 };
 
 ProductRow.prototype.set_quantity = function(value){
+    this._quantity_cell().html('');
     this._quantity_cell().text(value);
 };
 
 ProductRow.prototype.set_price = function(value){
+    this._price_cell().html('');
     this._price_cell().text(value);
 };
 
 ProductRow.prototype.set_total = function(value){
+    this._total_cell().html('');
     this._total_cell().text(value);
 };
 
@@ -165,6 +174,22 @@ ProductRow.prototype.accept_button = function(){
 
 ProductRow.prototype.cancel_button = function(){
     return this._actions_cell().children('img[src$="cancel.png"]').first();
+};
+
+ProductRow.prototype._activate_edit_delete_buttons = function(){
+    var actions_cell = this._actions_cell();
+    actions_cell.html('');
+    var edit_button     = jQuery('<img/>', {src: 'images/pencil.png', class: 'action-button'});
+    var delete_button   = jQuery('<img/>', {src: 'images/trash.png', class: 'action-button'});
+    actions_cell.append(edit_button, delete_button);
+};
+
+ProductRow.prototype._activate_accept_cancel_buttons = function(){
+    var actions_cell = this._actions_cell();
+    actions_cell.html('');
+    var accept_button   = jQuery('<img/>', {src: 'images/accept.png', class: 'action-button'});
+    var cancel_button   = jQuery('<img/>', {src: 'images/cancel.png', class: 'action-button'});
+    actions_cell.append(accept_button, cancel_button);
 };
 
 ProductRow.prototype._number_cell = function(){
