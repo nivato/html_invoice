@@ -8,12 +8,12 @@ AddPanel.prototype.inputs_verified = function(){
         this._product_input().focus();
         error = true;
     }
-    if (isNaN(this.get_quantity())){
+    if (isNaN(this.get_quantity()) || this.get_quantity() <= 0){
         this._quantity_input().addClass('error');
         this._quantity_input().focus();
         error = true;
     }
-    if (isNaN(this.get_price())){
+    if (isNaN(this.get_price()) || this.get_price() <= 0){
         this._price_input().addClass('error');
         this._price_input().focus();
         error = true;

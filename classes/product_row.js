@@ -63,14 +63,14 @@ ProductRow.prototype.inputs_verified = function(){
     }
     var quantity_input = this.quantity_input();
     quantity_input.removeClass('error');
-    if (isNaN(parseFloat(quantity_input.val()))){
+    if (isNaN(parseFloat(quantity_input.val())) || parseFloat(quantity_input.val()) <= 0){
         quantity_input.addClass('error');
         quantity_input.focus();
         error = true;
     }
     var price_input = this.price_input();
     price_input.removeClass('error');
-    if (isNaN(parseFloat(price_input.val()))){
+    if (isNaN(parseFloat(price_input.val())) || parseFloat(price_input.val()) <= 0){
         price_input.addClass('error');
         price_input.focus();
         error = true;
@@ -79,16 +79,23 @@ ProductRow.prototype.inputs_verified = function(){
 };
 
 ProductRow.prototype.accept_edit = function(){
-    this.row_element.removeClass('editable-row');
-    this.row_element.children().removeClass('editable-cell');
-    
     this.set_product_name(this.product_input().val());
     this.set_units(this.units_select().val());
     this.set_quantity(this.quantity_input().val());
     this.set_price(this.price_input().val());
     this.calculate_total();
     
+    this.make_readonly();
+};
+
+ProductRow.prototype.make_readonly = function(){
+    this.row_element.removeClass('editable-row');
+    this.row_element.children().removeClass('editable-cell');
     this._activate_edit_delete_buttons();
+};
+
+ProductRow.prototype.remove = function(){
+    this.row_element.remove();
 };
 
 ProductRow.prototype.element = function(){
@@ -179,16 +186,16 @@ ProductRow.prototype.cancel_button = function(){
 ProductRow.prototype._activate_edit_delete_buttons = function(){
     var actions_cell = this._actions_cell();
     actions_cell.html('');
-    var edit_button     = jQuery('<img/>', {src: 'images/pencil.png', class: 'action-button'});
-    var delete_button   = jQuery('<img/>', {src: 'images/trash.png', class: 'action-button'});
+    var edit_button     = jQuery('<img/>', {src: 'images/pencil.png', class: 'action-button', title: 'Edit Product'});
+    var delete_button   = jQuery('<img/>', {src: 'images/trash.png', class: 'action-button', title: 'Delete Product'});
     actions_cell.append(edit_button, delete_button);
 };
 
 ProductRow.prototype._activate_accept_cancel_buttons = function(){
     var actions_cell = this._actions_cell();
     actions_cell.html('');
-    var accept_button   = jQuery('<img/>', {src: 'images/accept.png', class: 'action-button'});
-    var cancel_button   = jQuery('<img/>', {src: 'images/cancel.png', class: 'action-button'});
+    var accept_button   = jQuery('<img/>', {src: 'images/accept.png', class: 'action-button', title: 'Accept Changes'});
+    var cancel_button   = jQuery('<img/>', {src: 'images/cancel.png', class: 'action-button', title: 'Cancel Changes'});
     actions_cell.append(accept_button, cancel_button);
 };
 
